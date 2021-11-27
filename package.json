@@ -22,6 +22,7 @@
     "express-session": "^1.17.2",
     "express-validator": "^6.13.0",
     "font-awesome": "^4.7.0",
+    "google-auth-library": "^7.10.2",
     "gravatar": "^1.8.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.0.13",

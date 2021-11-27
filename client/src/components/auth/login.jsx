@@ -115,7 +115,7 @@ const Login = () => {
                           Login
                         </button>
                       </div>
-                      <GoogleAuth />
+                      {/* <GoogleAuth /> v */}
                       {/* <a href="api/auth/google">Google</a> */}
 
                       <p className="text-center text-muted mt-5 mb-0">

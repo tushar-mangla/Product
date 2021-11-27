@@ -1,6 +1,7 @@
 import React from "react";
 import { GoogleLogin } from "react-google-login";
 import dotenv from "dotenv";
+import axios from "axios";
 
 dotenv.config({ path: "../../../../config/config.env" });
 
@@ -8,17 +9,16 @@ const clientId = process.env.GOOGLE_CLIENT_ID;
 const buttonText = "Login with Google";
 
 const onSuccess = async (googleData) => {
-  const res = await fetch("/api/auth/google/callback", {
-    method: "POST",
-    body: JSON.stringify({
-      token: googleData.tokenId,
-    }),
-    headers: {
-      "Content-Type": "application/json",
+  axios({
+    method: "post",
+    url: "/api/auth/google",
+    data: {
+      googleId: googleData.googleId,
+      email: googleData.email,
     },
-  });
-
-  const data = await res.json();
+  })
+    .then((res) => console.log(res.data))
+    .catch((err) => console.log(err));
 };
 
 const onFailure = () => {};
@@ -29,7 +29,8 @@ const GoogleAuth = () => {
       clientId={clientId}
       buttonText={buttonText}
       onSuccess={onSuccess}
-      onFailure={onFailure}
+      onFailure={onSuccess}
+      cookiePolicy={"single_host_origin"}
     />
   );
 };

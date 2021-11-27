@@ -54,13 +54,7 @@ router.post(
 
         await user.save();
 
-        const payload = {
-          user: {
-            id: user.id,
-          },
-        };
-
-        // res.send("User registered");
+        res.send("User registered");
       } catch (err) {
         console.error(err.message);
         res.status(500).send("Server error");
