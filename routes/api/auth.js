@@ -5,48 +5,59 @@ const bcrypt = require("bcryptjs");
 const dotenv = require("dotenv");
 const googleAuth = require("../../passport/passport-google");
 const localAuth = require("../../passport/passport-local");
+const passportLocal = require("passport-local").Strategy;
 
-const { ensureAuth, ensureGuest } = require("../../middleware/middleware");
+const {
+  checkAuthenticated,
+  checkNotAuthenticated,
+} = require("../../middleware/middleware");
 
 dotenv.config({ path: "../../config/config.env" });
 
 googleAuth(passport);
-// localAuth(passport);
+
+// localAuth(passport, (email)=> )
 
 router.get(
   "/google",
-  ensureGuest,
+  checkNotAuthenticated,
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
 router.get(
   "/google/callback",
-  ensureAuth,
+  checkAuthenticated,
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req, res) => {
     res.send("google auth successfull");
   }
 );
 
-router.get("/logout", (res, req) => {
+router.delete("/logout", (req, res) => {
   req.logout();
-  res.redirect("/login");
+  res.send("logout success");
 });
 
 router.post(
   "/",
-  passport.authenticate("local", { failureRedirect: "/login" }),
-  async (res, req) => {
-    res.redirect("/");
+  localAuth.authenticate("local", {
+    failureRedirect: "/api/post",
+  }),
+  function (req, res) {
+    // console.log(req.user);
+    const id = req.user._id;
+
+    res.redirect(`/api/profile/${id}`);
+    // res.render("../../client/src/components/auth/login");
   }
 );
 
-router.get("/login", (req, res) => {
-  res.send("local auth successful");
+router.get("/", (req, res) => {
+  res.redirect("/api/auth");
 });
 
-router.get("/login", (req, res) => {
-  res.re;
-});
+// router.get("/login", (req, res) => {
+//   res.re;
+// });
 
 module.exports = router;

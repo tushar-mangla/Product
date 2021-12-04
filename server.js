@@ -2,6 +2,7 @@ const express = require("express");
 const connectDB = require("./config/db");
 const dotenv = require("dotenv");
 const session = require("express-session");
+const flash = require("connect-flash");
 const passport = require("passport");
 const googleAuth = require("./passport/passport-google");
 const localAuth = require("./passport/passport-local");
@@ -30,6 +31,7 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 app.get("/", (req, res) => res.send("API Running"));
 

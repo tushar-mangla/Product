@@ -3,6 +3,10 @@ const router = express.Router();
 const gravatar = require("gravatar");
 const bcrypt = require("bcryptjs");
 const { check, validationResult } = require("express-validator");
+const {
+  checkAuthenticated,
+  checkNotAuthenticated,
+} = require("../../middleware/middleware");
 
 const User = require("../../models/User");
 
@@ -25,6 +29,7 @@ router.post(
       }
 
       const { name, email, password } = req.body;
+      // console.log(followers);
 
       try {
         let user = await User.findOne({ email });
@@ -48,9 +53,9 @@ router.post(
           password,
         });
 
-        const salt = await bcrypt.genSalt(10);
+        // const salt = await bcrypt.genSalt(10);
 
-        user.password = await bcrypt.hash(password, salt);
+        // user.password = await bcrypt.hash(password, salt);
 
         await user.save();
 
